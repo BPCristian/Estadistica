@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento de Consumo Energético - contaduria publica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f0f3f6;
+            --text-color: #333;
+            --card-bg-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            color: #fff;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .navbar-nav {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .nav-item {
+            margin-left: 20px;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 300;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+
+        .card {
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -10px;
+        }
+
+        .col-md-6 {
+            flex: 0 0 calc(50% - 20px);
+            margin: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .col-md-6 {
+                flex: 0 0 100%;
+            }
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        #consumoEntries {
+            margin-bottom: 20px;
+        }
+
+        .entry {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .entry-field {
+            flex: 1;
+        }
+
+        .fw-bold {
+            font-weight: bold;
+        }
+
+        #consumoChart {
+            width: 100%;
+            height: 300px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background-color: #e9ecef;
+        }
+
+        .stat-title {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .advice-card {
+            background-color: var(--secondary-color);
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .advice-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container navbar-content">
+            <a class="navbar-brand" href="#">Seguimiento de Consumo Energético</a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="">Karen Liseth Acevedo Oteroa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Dayana Michel Cortez Álvareza</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Briana Del Carmen Estrada Tiradoa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"> Jesús David Salgado Tiradoa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Alejandra Vergara Simancaa</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Ingresar Consumo</h2>
+                <div id="consumoEntries">
+                    <div class="entry">
+                        <div class="entry-field">
+                            <label class="form-label">Mes:</label>
+                            <input type="text" class="form-control month" required>
+                        </div>
+                        <div class="entry-field">
+                            <label class="form-label">Consumo:</label>
+                            <input type="number" class="form-control amount" required>
+                        </div>
+                    </div>
+                </div>
+                <button id="addEntryBtn" class="btn btn-outline">Añadir mes de consumo</button>
+                <button id="submitDataBtn" class="btn btn-primary">Guardar Consumo</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Estadísticas</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-title">Promedio</div>
+                                <div id="avg" class="stat-value">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-title">Desviación Estándar</div>
+                                <div id="stddev" class="stat-value">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-title">Percentil Q1</div>
+                                <div id="q1" class="stat-value">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-title">Mediana</div>
+                                <div id="median" class="stat-value">-</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-title">Percentil Q3</div>
+                                <div id="q3" class="stat-value">-</div>
+                            </div>
+                        </div>
+                        <div class="advice-card">
+                            <h4 class="advice-title">Consejo de Ahorro</h4>
+                            <p id="advice">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Historial de Consumo</h3>
+                        <canvas id="consumoChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
